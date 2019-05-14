@@ -2,12 +2,11 @@ package org.logstash.beats;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.AttributeKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.InetSocketAddress;
 import javax.net.ssl.SSLHandshakeException;
+import java.net.InetSocketAddress;
 
 public class BeatsHandler extends SimpleChannelInboundHandler<Batch> {
     private final static Logger logger = LogManager.getLogger(BeatsHandler.class);

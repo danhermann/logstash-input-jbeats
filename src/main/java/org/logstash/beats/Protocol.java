@@ -1,8 +1,5 @@
 package org.logstash.beats;
 
-/**
- * Created by ph on 2016-05-16.
- */
 public class Protocol {
     public static final byte VERSION_1 = '1';
     public static final byte VERSION_2 = '2';
