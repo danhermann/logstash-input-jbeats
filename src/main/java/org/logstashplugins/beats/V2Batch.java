@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;

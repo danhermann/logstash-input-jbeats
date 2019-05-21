@@ -4,6 +4,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.Before;
 import org.junit.Test;
+import org.logstashplugins.beats.Ack;
+import org.logstashplugins.beats.BeatsHandler;
+import org.logstashplugins.beats.ConnectionHandler;
+import org.logstashplugins.beats.IMessageListener;
+import org.logstashplugins.beats.Message;
+import org.logstashplugins.beats.Protocol;
+import org.logstashplugins.beats.V1Batch;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

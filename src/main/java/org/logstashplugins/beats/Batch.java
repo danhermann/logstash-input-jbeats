@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 /**
  * Interface representing a Batch of {@link Message}.

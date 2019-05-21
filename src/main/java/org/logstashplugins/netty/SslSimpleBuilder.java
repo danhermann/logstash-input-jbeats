@@ -1,4 +1,4 @@
-package org.logstash.netty;
+package org.logstashplugins.netty;
 
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.handler.ssl.OpenSsl;

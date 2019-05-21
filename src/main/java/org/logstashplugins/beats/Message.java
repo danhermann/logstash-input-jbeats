@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;

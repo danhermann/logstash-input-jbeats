@@ -2,6 +2,9 @@ package org.logstash.beats;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.logstashplugins.beats.Message;
+import org.logstashplugins.beats.Protocol;
+import org.logstashplugins.beats.V1Batch;
 
 import java.security.SecureRandom;
 import java.util.HashMap;

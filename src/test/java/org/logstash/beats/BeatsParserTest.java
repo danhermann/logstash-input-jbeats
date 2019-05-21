@@ -10,6 +10,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.logstashplugins.beats.Batch;
+import org.logstashplugins.beats.BeatsParser;
+import org.logstashplugins.beats.Message;
+import org.logstashplugins.beats.Protocol;
+import org.logstashplugins.beats.V1Batch;
+import org.logstashplugins.beats.V2Batch;
 
 import java.util.Collections;
 import java.util.HashMap;

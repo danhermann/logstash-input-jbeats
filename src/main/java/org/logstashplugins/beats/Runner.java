@@ -1,8 +1,8 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.logstash.netty.SslSimpleBuilder;
+import org.logstashplugins.netty.SslSimpleBuilder;
 
 
 public class Runner {
@@ -13,7 +13,7 @@ public class Runner {
 
 
     static public void main(String[] args) throws Exception {
-        logger.info("Starting Beats Bulk");
+        logger.info("Starting JBeats Bulk");
 
         // Check for leaks.
         // ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);

@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import java.util.ArrayList;
 import java.util.Iterator;

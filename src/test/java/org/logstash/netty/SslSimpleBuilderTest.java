@@ -1,6 +1,7 @@
 package org.logstash.netty;
 
 import org.junit.Test;
+import org.logstashplugins.netty.SslSimpleBuilder;
 
 import static org.junit.Assert.*;
 

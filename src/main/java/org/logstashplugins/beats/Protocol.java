@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 public class Protocol {
     public static final byte VERSION_1 = '1';

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.junit.Test;
+import org.logstashplugins.beats.Message;
+import org.logstashplugins.beats.Protocol;
+import org.logstashplugins.beats.V2Batch;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
