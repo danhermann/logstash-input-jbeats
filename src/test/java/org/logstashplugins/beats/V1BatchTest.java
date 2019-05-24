@@ -1,15 +1,14 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.logstashplugins.beats.Message;
-import org.logstashplugins.beats.Protocol;
-import org.logstashplugins.beats.V1Batch;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class V1BatchTest {
     private V1Batch batch;

@@ -1,6 +1,5 @@
 package org.logstashplugins.beats;
 
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterOutputStream;
-
 
 public class BeatsParser extends ByteToMessageDecoder {
     private final static Logger logger = LogManager.getLogger(BeatsParser.class);
@@ -37,7 +35,6 @@ public class BeatsParser extends ByteToMessageDecoder {
         States(int length) {
             this.length = length;
         }
-
     }
 
     private States currentState = States.READ_HEADER;
@@ -46,7 +43,7 @@ public class BeatsParser extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if(!hasEnoughBytes(in)) {
+        if (!hasEnoughBytes(in)) {
             return;
         }
 
@@ -70,7 +67,7 @@ public class BeatsParser extends ByteToMessageDecoder {
             case READ_FRAME_TYPE: {
                 byte frameType = in.readByte();
 
-                switch(frameType) {
+                switch (frameType) {
                     case Protocol.CODE_WINDOW_SIZE: {
                         transition(States.READ_WINDOW_SIZE);
                         break;
@@ -102,7 +99,7 @@ public class BeatsParser extends ByteToMessageDecoder {
                 // actually completely done other than checking the windows and the sequence number,
                 // If the FSM read a new window and I have still
                 // events buffered I should send the current batch down to the next handler.
-                if(!batch.isEmpty()) {
+                if (!batch.isEmpty()) {
                     logger.warn("New window size received but the current batch was not complete, sending the current batch");
                     out.add(batch);
                     batchComplete();
@@ -118,13 +115,13 @@ public class BeatsParser extends ByteToMessageDecoder {
                 int fieldsCount = (int) in.readUnsignedInt();
                 int count = 0;
 
-                if(fieldsCount <= 0) {
+                if (fieldsCount <= 0) {
                     throw new InvalidFrameProtocolException("Invalid number of fields, received: " + fieldsCount);
                 }
 
                 Map dataMap = new HashMap<String, String>(fieldsCount);
 
-                while(count < fieldsCount) {
+                while (count < fieldsCount) {
                     int fieldLength = (int) in.readUnsignedInt();
                     ByteBuf fieldBuf = in.readBytes(fieldLength);
                     String field = fieldBuf.toString(Charset.forName("UTF8"));
@@ -140,9 +137,9 @@ public class BeatsParser extends ByteToMessageDecoder {
                     count++;
                 }
                 Message message = new Message(sequence, dataMap);
-                ((V1Batch)batch).addMessage(message);
+                ((V1Batch) batch).addMessage(message);
 
-                if (batch.isComplete()){
+                if (batch.isComplete()) {
                     out.add(batch);
                     batchComplete();
                 }
@@ -156,7 +153,7 @@ public class BeatsParser extends ByteToMessageDecoder {
                 sequence = (int) in.readUnsignedInt();
                 int jsonPayloadSize = (int) in.readUnsignedInt();
 
-                if(jsonPayloadSize <= 0) {
+                if (jsonPayloadSize <= 0) {
                     throw new InvalidFrameProtocolException("Invalid json length, received: " + jsonPayloadSize);
                 }
 
@@ -193,9 +190,9 @@ public class BeatsParser extends ByteToMessageDecoder {
             }
             case READ_JSON: {
                 logger.trace("Running: READ_JSON");
-                ((V2Batch)batch).addMessage(sequence, in, requiredBytes);
-                if(batch.isComplete()) {
-                    if(logger.isTraceEnabled()) {
+                ((V2Batch) batch).addMessage(sequence, in, requiredBytes);
+                if (batch.isComplete()) {
+                    if (logger.isTraceEnabled()) {
                         logger.trace("Sending batch size: " + this.batch.size() + ", windowSize: " + batch.getBatchSize() + " , seq: " + sequence);
                     }
                     out.add(batch);
@@ -217,7 +214,7 @@ public class BeatsParser extends ByteToMessageDecoder {
     }
 
     private void transition(States nextState, int requiredBytes) {
-        if(logger.isTraceEnabled()) {
+        if (logger.isTraceEnabled()) {
             logger.trace("Transition, from: " + currentState + ", to: " + nextState + ", requiring " + requiredBytes + " bytes");
         }
         this.currentState = nextState;

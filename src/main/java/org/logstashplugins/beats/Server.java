@@ -23,8 +23,8 @@ public class Server {
     private final int port;
     private final String host;
     private final int beatsHeandlerThreadCount;
-    private NioEventLoopGroup workGroup;
-    private IMessageListener messageListener = new MessageListener();
+    private NioEventLoopGroup workgroup;
+    private IMessageListener messageListener;
     private SslSimpleBuilder sslBuilder;
     private BeatsInitializer beatsInitializer;
 
@@ -42,22 +42,22 @@ public class Server {
     }
 
     public Server listen() throws InterruptedException {
-        if (workGroup != null) {
+        if (workgroup != null) {
             try {
-                logger.debug("Shutting down existing worker group before starting");
-                workGroup.shutdownGracefully().sync();
+                logger.debug("Shutting down existing worker group before starting server");
+                workgroup.shutdownGracefully().sync();
             } catch (Exception e) {
                 logger.error("Could not shut down worker group before starting", e);
             }
         }
-        workGroup = new NioEventLoopGroup();
+        workgroup = new NioEventLoopGroup();
         try {
-            logger.info("Starting server on port: {}", this.port);
+            logger.info("Starting Beats server on port: {}", this.port);
 
             beatsInitializer = new BeatsInitializer(isSslEnable(), messageListener, clientInactivityTimeoutSeconds, beatsHeandlerThreadCount);
 
             ServerBootstrap server = new ServerBootstrap();
-            server.group(workGroup)
+            server.group(workgroup)
                     .channel(NioServerSocketChannel.class)
                     .childOption(ChannelOption.SO_LINGER, 0) // Since the protocol doesn't support yet a remote close from the server and we don't want to have 'unclosed' socket lying around we have to use `SO_LINGER` to force the close of the socket.
                     .childHandler(beatsInitializer);
@@ -73,20 +73,20 @@ public class Server {
 
     public void stop() {
         logger.debug("Server shutting down");
-        shutdown();
+        try {
+            shutdown();
+        } catch (InterruptedException ex) {
+            throw new IllegalStateException(ex);
+        }
         logger.debug("Server stopped");
     }
 
-    private void shutdown(){
-        try {
-            if (workGroup != null) {
-                workGroup.shutdownGracefully().sync();
-            }
-            if (beatsInitializer != null) {
-                beatsInitializer.shutdownEventExecutor();
-            }
-        } catch (InterruptedException e){
-            throw new IllegalStateException(e);
+    private void shutdown() throws InterruptedException {
+        if (workgroup != null) {
+            workgroup.shutdownGracefully().sync();
+        }
+        if (beatsInitializer != null) {
+            beatsInitializer.shutdownEventExecutor();
         }
     }
 
@@ -132,7 +132,7 @@ public class Server {
                 pipeline.addLast(SSL_HANDLER, sslHandler);
             }
             pipeline.addLast(idleExecutorGroup, IDLESTATE_HANDLER,
-                             new IdleStateHandler(localClientInactivityTimeoutSeconds, IDLESTATE_WRITER_IDLE_TIME_SECONDS, localClientInactivityTimeoutSeconds));
+                    new IdleStateHandler(localClientInactivityTimeoutSeconds, IDLESTATE_WRITER_IDLE_TIME_SECONDS, localClientInactivityTimeoutSeconds));
             pipeline.addLast(BEATS_ACKER, new AckEncoder());
             pipeline.addLast(CONNECTION_HANDLER, new ConnectionHandler());
             pipeline.addLast(beatsHandlerExecutorGroup, new BeatsParser(), new BeatsHandler(localMessageListener));

@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -14,11 +14,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.junit.Before;
 import org.junit.Test;
-import org.logstashplugins.beats.Message;
-import org.logstashplugins.beats.MessageListener;
-import org.logstashplugins.beats.Server;
-import org.logstashplugins.beats.V1Batch;
-import org.logstashplugins.beats.V2Batch;
 
 import java.util.Collections;
 import java.util.Random;

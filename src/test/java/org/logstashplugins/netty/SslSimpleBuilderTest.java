@@ -1,9 +1,8 @@
-package org.logstash.netty;
+package org.logstashplugins.netty;
 
 import org.junit.Test;
-import org.logstashplugins.netty.SslSimpleBuilder;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 /**
  * Unit test for {@link SslSimpleBuilder}

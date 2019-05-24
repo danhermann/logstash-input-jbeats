@@ -16,8 +16,8 @@ public class V2Batch implements Batch {
     private int batchSize;
     private int highestSequence = -1;
 
-    public void setProtocol(byte protocol){
-        if (protocol != Protocol.VERSION_2){
+    public void setProtocol(byte protocol) {
+        if (protocol != Protocol.VERSION_2) {
             throw new IllegalArgumentException("Only version 2 protocol is supported");
         }
     }
@@ -27,7 +27,7 @@ public class V2Batch implements Batch {
         return Protocol.VERSION_2;
     }
 
-    public Iterator<Message> iterator(){
+    public Iterator<Message> iterator() {
         internalBuffer.resetReaderIndex();
         return new Iterator<Message>() {
             @Override
@@ -74,25 +74,26 @@ public class V2Batch implements Batch {
     }
 
     @Override
-    public int getHighestSequence(){
+    public int getHighestSequence() {
         return highestSequence;
     }
 
     /**
      * Adds a message to the batch, which will be constructed into an actual {@link Message} lazily.
-      * @param sequenceNumber sequence number of the message within the batch
-     * @param buffer A ByteBuf pointing to serialized JSon
-     * @param size size of the serialized Json
+     *
+     * @param sequenceNumber sequence number of the message within the batch
+     * @param buffer         A ByteBuf pointing to serialized JSon
+     * @param size           size of the serialized Json
      */
     void addMessage(int sequenceNumber, ByteBuf buffer, int size) {
         written++;
-        if (internalBuffer.writableBytes() < size + (2 * SIZE_OF_INT)){
+        if (internalBuffer.writableBytes() < size + (2 * SIZE_OF_INT)) {
             internalBuffer.capacity(internalBuffer.capacity() + size + (2 * SIZE_OF_INT));
         }
         internalBuffer.writeInt(sequenceNumber);
         internalBuffer.writeInt(size);
         buffer.readBytes(internalBuffer, size);
-        if (sequenceNumber > highestSequence){
+        if (sequenceNumber > highestSequence) {
             highestSequence = sequenceNumber;
         }
     }

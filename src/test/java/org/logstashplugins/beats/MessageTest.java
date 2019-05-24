@@ -1,7 +1,6 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import org.junit.Test;
-import org.logstashplugins.beats.Message;
 
 import java.util.HashMap;
 import java.util.Map;

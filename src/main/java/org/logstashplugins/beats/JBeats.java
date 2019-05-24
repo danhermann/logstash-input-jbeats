@@ -7,6 +7,7 @@ import co.elastic.logstash.api.Input;
 import co.elastic.logstash.api.LogstashPlugin;
 import co.elastic.logstash.api.PluginConfigSpec;
 import co.elastic.logstash.api.PluginHelper;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,10 +42,15 @@ Runtime.getRuntime().availableProcessors();
 
 */
 
+    private final Logger logger;
     private Codec codec;
+    private final Context context;
     private final String id;
-    private volatile boolean stopRequested = false;
     private final CountDownLatch countDownLatch;
+    private final int port;
+    private final int executorThreads;
+    private Server server;
+    private MessageListener messageListener;
 
     /**
      * Required constructor.
@@ -55,18 +61,36 @@ Runtime.getRuntime().availableProcessors();
      */
     public JBeats(final String id, final Configuration configuration, final Context context) {
         this.id = id;
+        this.context = context;
         this.countDownLatch = new CountDownLatch(1);
         this.codec = configuration.get(CODEC_CONFIG);
+        this.port = configuration.get(PORT_CONFIG).intValue();
+        this.executorThreads = configuration.get(EXECUTOR_THREADS_CONFIG).intValue();
+        this.logger = context.getLogger(this);
     }
 
     @Override
     public void start(Consumer<Map<String, Object>> consumer) {
+        server = new Server("0.0.0.0", port, 60, executorThreads);
 
+        messageListener = new MessageListener(consumer, context.getEventFactory(), context.getMetric(this), codec, true, true);
+        server.setMessageListener(messageListener);
+        try {
+            server.listen();
+        } catch (InterruptedException ex) {
+            logger.error("JBeats server interrupted", ex);
+        } finally {
+            stop();
+        }
     }
 
     @Override
     public void stop() {
-        stopRequested = true;
+        try {
+            server.stop();
+        } finally {
+            countDownLatch.countDown();
+        }
     }
 
     @Override

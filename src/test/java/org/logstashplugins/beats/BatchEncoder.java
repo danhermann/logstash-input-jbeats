@@ -1,4 +1,4 @@
-package org.logstash.beats;
+package org.logstashplugins.beats;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.netty.buffer.ByteBuf;
@@ -6,9 +6,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.logstashplugins.beats.Batch;
-import org.logstashplugins.beats.Message;
-import org.logstashplugins.beats.Protocol;
 
 
 import java.io.IOException;
