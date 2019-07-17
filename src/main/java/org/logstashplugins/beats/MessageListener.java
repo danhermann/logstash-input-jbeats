@@ -153,6 +153,7 @@ public class MessageListener implements IMessageListener {
             eventTransformer.transform(null);
             consumer.accept(null);
         }
+        throw new UnsupportedOperationException();
     }
 
     private String extractTargetField(Map data) {
@@ -172,19 +173,6 @@ public class MessageListener implements IMessageListener {
     private boolean isLogstashForwarder(Map data) {
         return data.get(LSF_LOG_LINE_FIELD) != null;
     }
-
-    /*
-    def flush_buffer(ctx)
-      return if codec(ctx).nil?
-
-    transformer = EventTransformCommon.new(@input)
-    codec(ctx).flush do |event|
-            transformer.transform(event)
-    @queue << event
-            end
-    end
-    */
-
 
     private void registerConnection(ChannelHandlerContext context) {
         connections.put(context, new ConnectionState(context, codec.cloneCodec(), extractIpAddress(context)));

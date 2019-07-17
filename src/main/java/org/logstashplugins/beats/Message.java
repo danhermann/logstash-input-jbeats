@@ -25,6 +25,8 @@ public class Message implements Comparable<Message> {
      * @param map      key/value pairs representing the message
      */
     public Message(int sequence, Map map) {
+        // used only for V1Batch
+System.out.println("=== creating v1batch");
         this.sequence = sequence;
         this.data = map;
     }
@@ -37,6 +39,8 @@ public class Message implements Comparable<Message> {
      * @param buffer   {@link ByteBuf} buffer containing Json object
      */
     public Message(int sequence, ByteBuf buffer) {
+        // used for V2Batch
+System.out.println("=== creating v2batch");
         this.sequence = sequence;
         this.buffer = buffer;
     }
@@ -62,7 +66,7 @@ public class Message implements Comparable<Message> {
                 data = MAPPER.readValue((InputStream) byteBufInputStream, Map.class);
                 buffer = null;
             } catch (IOException e) {
-                throw new RuntimeException("Unable to parse beats payload ", e);
+                throw new RuntimeException("Unable to parse jbeats payload ", e);
             }
         }
         return data;

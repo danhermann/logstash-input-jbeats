@@ -42,6 +42,7 @@ public class BeatsParser extends ByteToMessageDecoder {
     private int sequence = 0;
 
     @Override
+    @SuppressWarnings("Duplicates")
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         if (!hasEnoughBytes(in)) {
             return;
